@@ -10,8 +10,18 @@ var Burgers = require("../models/character");
 // Create all our routes and set up logic within those routes where required.
 router.get("/", function (req, res) {
   Burgers.findAll({}).then(function (data) {
+    var result=[]
+    for (let i=0;i<data.length;i++){
+result.push( data[i].dataValues)
 
-    res.render("index", data);
+  }
+let final={
+  burgers : result
+
+}
+console.log();
+
+    res.render("index", final);
     // res.json( data);
   });
 });
@@ -26,34 +36,40 @@ router.post("/api/burgers", function (req, res) {
 });
 
 router.put("/api/burgers/:id", function (req, res) {
-  var condition = "id = " + req.params.id;
+  
+console.log(req.body.eaten );
 
-  console.log("condition", condition);
-
-  burger.update({
-    eaten: req.body.eaten
-  }, condition, function (result) {
+  // var condition = "id = " + req.params.id;
+  Burgers.update(
+    {eaten: req.body.eaten },
+    {where:{id: req.params.id}}
+  ).then( function (result) {
     if (result.changedRows == 0) {
       // If no rows were changed, then the ID must not exist, so 404
       return res.status(404).end();
     } else {
       res.status(200).end();
     }
+  }).catch(function(err){
+    console.log(err);
+    
   });
 });
 
 router.delete("/api/burgers/:id", function (req, res) {
-  var condition = "id = " + req.params.id;
 
-  burger.delete(condition, function (result) {
+  Burgers.destroy({
+    where: {
+       id: req.params.id
+    }
+}).then( function (result) {
     if (result.affectedRows == 0) {
-      // If no rows were changed, then the ID must not exist, so 404
       return res.status(404).end();
     } else {
       res.status(200).end();
     }
   });
+
 });
 
-// Export routes for server.js to use.
 module.exports = router;
