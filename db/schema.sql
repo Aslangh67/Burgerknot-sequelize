@@ -1,6 +1,6 @@
 ### Schema
 
-CREATE DATABASE burger_db;
-USE burger_db;
+CREATE DATABASE sequelize_burger_db;
+USE sequelize_burger_db;
 
 

@@ -1,7 +1,10 @@
 var express = require("express");
 
 var router = express.Router();
-var Burgers = require("../models/character");
+// var db = require("../models");
+var db= require("../models")
+console.log(db.Burger);
+
 
 
 // Import the model (burger.js) to use its database functions.
@@ -9,7 +12,7 @@ var Burgers = require("../models/character");
 
 // Create all our routes and set up logic within those routes where required.
 router.get("/", function (req, res) {
-  Burgers.findAll({}).then(function (data) {
+  db.Burger.findAll().then(function (data) {
     var result=[]
     for (let i=0;i<data.length;i++){
 result.push( data[i].dataValues)
@@ -27,7 +30,7 @@ console.log();
 });
 
 router.post("/api/burgers", function (req, res) {
-  Burgers.create({
+  db.Burger.create({
     name: req.body.name,
     eaten: req.body.eaten
   }).then(function (result) {
@@ -40,7 +43,7 @@ router.put("/api/burgers/:id", function (req, res) {
 console.log(req.body.eaten );
 
   // var condition = "id = " + req.params.id;
-  Burgers.update(
+  db.Burger.update(
     {eaten: req.body.eaten },
     {where:{id: req.params.id}}
   ).then( function (result) {
@@ -58,7 +61,7 @@ console.log(req.body.eaten );
 
 router.delete("/api/burgers/:id", function (req, res) {
 
-  Burgers.destroy({
+  db.Burger.destroy({
     where: {
        id: req.params.id
     }
